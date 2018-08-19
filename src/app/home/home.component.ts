@@ -20,6 +20,8 @@ export class HomeComponent implements OnInit {
 
   constructor(private data: DataService) {
     // refresh every 20 minutes
+    this.capeTownWeatherCurrently$ = null;
+    this.capeTownDailyWeather$ = [];
     this.refreshTimer$ = timer(0, 20 * 60 * 1000);
     this.selectedUnit$ = 'Celsius';
     this.apiFailInteval$ = 1000;
@@ -28,47 +30,25 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.refreshTimer$.subscribe(() => {
-      this.getWeather({tempUnit: 'fahrenheit'});
+      this.getWeather();
     });
   }
 
-  getWeather ({tempUnit = 'celcius'}: {tempUnit?: string} = {}) {
+  getWeather() {
     this.data.getCapeTownWeather().subscribe(data => {
-      if (tempUnit === 'fahrenheit') {
-        this.capeTownWeatherCurrently$ =
-          this.getFahrenheit(data['currently'].temperature);
-        this.unitSymbol$ = '℉';
-        this.selectedUnit$ = 'Fahrenheit';
-      } else {
-        this.capeTownWeatherCurrently$ = data['currently'].temperatureMax;
-      }
+      this.capeTownWeatherCurrently$ = data['currently'].temperature.toFixed();
       this.above25$ = this.capeTownWeatherCurrently$ > 25;
       this.below15$ = this.capeTownWeatherCurrently$ < 15;
       this.capeTownDailyWeather$ = data['daily'].data.map(day => {
         day.time = timeConverter(day.time);
-        if (tempUnit === 'fahrenheit') {
-          day.temperatureMin = this.getFahrenheit(day.temperatureMin);
-          day.temperatureMax = this.getFahrenheit(day.temperatureMax);
-        }
+        day['temperatureMin'] = Math.floor(day['temperatureMin']);
+        day['temperatureMax'] = Math.floor(day['temperatureMax']);
         return day;
       });
     });
   }
 
   updateDegrees(tempUnit: string) {
-    if (tempUnit === 'fahrenheit') {
-      this.capeTownWeatherCurrently$ =
-        this.getFahrenheit(this.capeTownWeatherCurrently$);
-      this.unitSymbol$ = '℉';
-      this.selectedUnit$ = 'Fahrenheit';
-    } else {
-      this.capeTownWeatherCurrently$ =
-        this.getCelsius(this.capeTownWeatherCurrently$);
-      this.unitSymbol$ = '℃';
-      this.selectedUnit$ = 'Celsius';
-    }
-    this.above25$ = this.capeTownWeatherCurrently$ > 25;
-    this.below15$ = this.capeTownWeatherCurrently$ < 15;
     this.capeTownDailyWeather$ = this.capeTownDailyWeather$.map(day => {
       if (tempUnit === 'Fahrenheit') {
         day['temperatureMin'] = this.getFahrenheit(day['temperatureMin']);
@@ -79,6 +59,17 @@ export class HomeComponent implements OnInit {
       }
       return day;
     });
+    if (tempUnit === 'Fahrenheit') {
+      this.capeTownWeatherCurrently$ = this.getFahrenheit(this.capeTownWeatherCurrently$);
+      this.unitSymbol$ = '℉';
+      this.selectedUnit$ = 'Fahrenheit';
+    } else {
+      this.capeTownWeatherCurrently$ = this.getCelsius(this.capeTownWeatherCurrently$);
+      this.unitSymbol$ = '℃';
+      this.selectedUnit$ = 'Celsius';
+    }
+    this.above25$ = this.capeTownWeatherCurrently$ > 25;
+    this.below15$ = this.capeTownWeatherCurrently$ < 15;
   }
 
   getFahrenheit (degrees: number) {

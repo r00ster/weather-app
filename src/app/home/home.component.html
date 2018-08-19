@@ -14,19 +14,19 @@
 <p>This is the Home page</p>
 
 <div>Display degrees in
-  <button (click)="updateDegrees('fahrenheit')">Fahrenheit</button> |
-  <button (click)="updateDegrees()">Celsius</button>
+  <button (click)="updateDegrees('Fahrenheit')">Fahrenheit</button> |
+  <button (click)="updateDegrees('Celsius')">Celsius</button>
 </div>
 
-<p>The current weather in Cape Town is: {{ capeTownWeatherCurrently$?.toFixed() }}{{ unitSymbol$ }}<p>
+<p>The current weather in Cape Town is: {{ capeTownWeatherCurrently$ }}{{ unitSymbol$ }}<p>
 
 <p *ngIf="above25$">** Warning the current temperature is above 25{{ unitSymbol$ }}</p>
 <p *ngIf="below15$">** Warning the current temperature is below 15{{ unitSymbol$ }}</p>
 
 <ul>
   <li *ngFor="let day of capeTownDailyWeather$">
-    Time: {{ day?.time }} <br/>
-    Min Temperature: {{ day?.temperatureMin.toFixed() }}{{ unitSymbol$ }}<br/>
-    Max Temperature: {{ day?.temperatureMax.toFixed() }}{{ unitSymbol$ }}<br/>
+    Time: {{ day['time'] }} <br/>
+    Min Temperature: {{ day['temperatureMin'] }}{{ unitSymbol$ }}<br/>
+    Max Temperature: {{ day['temperatureMax'] }}{{ unitSymbol$ }}<br/>
   </li>
 </ul>
