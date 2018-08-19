@@ -1,0 +1,32 @@
+<nav>
+  <ul>
+    <li>
+      <a routerLink="">Home</a>
+    </li>
+    <li>
+      <a routerLink="contact">Contact Me</a>
+    </li>
+  </ul>
+</nav>
+
+<p>{{ selectedUnit$ }}</p>
+
+<p>This is the Home page</p>
+
+<div>Display degrees in
+  <button (click)="updateDegrees('fahrenheit')">Fahrenheit</button> |
+  <button (click)="updateDegrees()">Celsius</button>
+</div>
+
+<p>The current weather in Cape Town is: {{ capeTownWeatherCurrently$?.toFixed() }}{{ unitSymbol$ }}<p>
+
+<p *ngIf="above25$">** Warning the current temperature is above 25{{ unitSymbol$ }}</p>
+<p *ngIf="below15$">** Warning the current temperature is below 15{{ unitSymbol$ }}</p>
+
+<ul>
+  <li *ngFor="let day of capeTownDailyWeather$">
+    Time: {{ day?.time }} <br/>
+    Min Temperature: {{ day?.temperatureMin.toFixed() }}{{ unitSymbol$ }}<br/>
+    Max Temperature: {{ day?.temperatureMax.toFixed() }}{{ unitSymbol$ }}<br/>
+  </li>
+</ul>
