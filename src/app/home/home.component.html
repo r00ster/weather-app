@@ -2,7 +2,7 @@
   <div class="hero-body">
     <div class="container">
       <h1 class="title has-text-centered">
-        The current weather in Cape Town is: {{ capeTownWeatherCurrently$ }}{{ unitSymbol$ }}
+        The current weather in Cape Town is: {{ capeTownWeatherCurrently$.toFixed() }}{{ unitSymbol$ }}
       </h1>
       <h2 class="has-text-danger has-text-centered has-text-weight-bold"
           *ngIf="above25$ && !apiFailing$">** Warning: The current temperature is above 25{{ unitSymbol$ }} **</h2>
@@ -37,8 +37,8 @@
           <tbody>
           <tr *ngFor="let day of capeTownDailyWeather$">
             <td>{{ day['time'] }}</td>
-            <td>{{ day['temperatureMin'] }}{{ unitSymbol$ }}</td>
-            <td>{{ day['temperatureMax'] }}{{ unitSymbol$ }}</td>
+            <td>{{ day['temperatureMin'].toFixed() }}{{ unitSymbol$ }}</td>
+            <td>{{ day['temperatureMax'].toFixed() }}{{ unitSymbol$ }}</td>
           </tr>
           </tbody>
         </table>

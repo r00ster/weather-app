@@ -11,10 +11,10 @@ export function timeConverter(unixTimestamp: number): string {
 }
 
 export function convertToFahrenheit(degrees: number): number {
-  return Math.floor(degrees * 1.8 + 32);
+  return degrees * 1.8 + 32;
 }
 
 export function convertToCelsius(degrees: number): number {
-  return Math.floor((degrees - 32) / 1.8);
+  return (degrees - 32) / 1.8;
 }
 

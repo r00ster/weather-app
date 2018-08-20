@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
     this.data.getCapeTownWeather()
       .pipe(retryWhen(this.retryPipeline()))
       .subscribe(data => {
-        this.capeTownWeatherCurrently$ = data['currently'].temperature.toFixed();
+        this.capeTownWeatherCurrently$ = data['currently'].temperature;
         this.above25$ = this.capeTownWeatherCurrently$ > 25;
         this.below15$ = this.capeTownWeatherCurrently$ < 15;
         this.capeTownDailyWeather$ = data['daily'].data.map(day => {
