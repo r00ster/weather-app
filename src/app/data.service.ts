@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, timer } from 'rxjs';
-import { retryWhen, mergeMap, finalize } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -19,22 +17,7 @@ export class DataService {
 
   getCapeTownWeather() {
     return this.http.get(this.corsAnywhereUrl +
-      this.capeTownWeatherData).pipe(
-        retryWhen(retryPipeline())
-      );
+      this.capeTownWeatherData);
   }
 }
 
-export const retryPipeline = ({
-  scalingDuration = 1000,
-}: {
-  scalingDuration?: number,
-} = {}) => (attempts: Observable<any>) => {
-  return attempts.pipe(
-    mergeMap((error, i) => {
-      const retryAttempt = i + 1;
-      return timer(retryAttempt * scalingDuration);
-    }),
-    finalize(() => console.log('API works again!'))
-  );
-};

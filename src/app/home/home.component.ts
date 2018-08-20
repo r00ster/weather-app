@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
-import { Observable, timer } from 'rxjs';
-import { timeConverter, convertToFahrenheit, convertToCelsius } from '../utils';
+import { Observable, timer, interval } from 'rxjs';
+import { retryWhen } from 'rxjs/operators';
+import {
+  timeConverter,
+  convertToFahrenheit,
+  convertToCelsius,
+  retryPipeline,
+} from '../utils';
 
 @Component({
   selector: 'app-home',
@@ -12,43 +18,47 @@ export class HomeComponent implements OnInit {
   selectedUnit$: string;
   capeTownWeatherCurrently$: number;
   capeTownDailyWeather$: Array<Object>;
-  refreshTimer$: Observable<number>;
-  apiFailInteval$: number;
   unitSymbol$: string;
   above25$: boolean;
   below15$: boolean;
+  apiFailing$: boolean;
+  apiFailInterval: number;
+  refreshTimer: Observable<number>;
 
   constructor(private data: DataService) {
     // refresh every 20 minutes
     this.capeTownWeatherCurrently$ = null;
     this.capeTownDailyWeather$ = [];
-    this.refreshTimer$ = timer(0, 20 * 60 * 1000);
+    this.refreshTimer = timer(0, 20 * 60 * 1000);
     this.selectedUnit$ = 'Celsius';
-    this.apiFailInteval$ = 1000;
+    this.apiFailInterval = 1000;
     this.unitSymbol$ = '℃';
+    this.apiFailing$ = false;
   }
 
   ngOnInit() {
-    this.refreshTimer$.subscribe(() => {
+    this.refreshTimer.subscribe(() => {
       this.getWeather();
     });
   }
 
-  getWeather() {
-    this.data.getCapeTownWeather().subscribe(data => {
-      this.capeTownWeatherCurrently$ = data['currently'].temperature.toFixed();
-      this.above25$ = this.capeTownWeatherCurrently$ > 25;
-      this.below15$ = this.capeTownWeatherCurrently$ < 15;
-      this.capeTownDailyWeather$ = data['daily'].data.map(day => {
-        day.time = timeConverter(day.time);
-        day['temperatureMin'] = Math.floor(day['temperatureMin']);
-        day['temperatureMax'] = Math.floor(day['temperatureMax']);
-        return day;
-      });
+  getWeather(): void {
+    this.data.getCapeTownWeather()
+      .pipe(retryWhen(retryPipeline()))
+      .subscribe(data => {
+        this.capeTownWeatherCurrently$ = data['currently'].temperature.toFixed();
+        this.above25$ = this.capeTownWeatherCurrently$ > 25;
+        this.below15$ = this.capeTownWeatherCurrently$ < 15;
+        this.capeTownDailyWeather$ = data['daily'].data.map(day => {
+          day.time = timeConverter(day.time);
+          day['temperatureMin'] = Math.floor(day['temperatureMin']);
+          day['temperatureMax'] = Math.floor(day['temperatureMax']);
+          return day;
+        });
     });
   }
 
-  updateDegrees(tempUnit: string) {
+  updateDegrees(tempUnit: string): void {
     this.capeTownDailyWeather$ = this.capeTownDailyWeather$.map(day => {
       day['temperatureMin'] = tempUnit === 'Fahrenheit' ?
         this.getFahrenheit(day['temperatureMin']) :
@@ -67,11 +77,11 @@ export class HomeComponent implements OnInit {
     this.below15$ = this.capeTownWeatherCurrently$ < 15;
   }
 
-  getFahrenheit (degrees: number) {
+  getFahrenheit(degrees: number): number {
     return this.selectedUnit$ !== 'Fahrenheit' ? convertToFahrenheit(degrees) : degrees;
   }
 
-  getCelsius (degrees: number) {
+  getCelsius(degrees: number): number {
     return this.selectedUnit$ !== 'Celsius' ? convertToCelsius(degrees) : degrees;
   }
 }

@@ -5,9 +5,12 @@
         The current weather in Cape Town is: {{ capeTownWeatherCurrently$ }}{{ unitSymbol$ }}
       </h1>
       <h2 class="has-text-danger has-text-centered has-text-weight-bold"
-          *ngIf="above25$">** Warning: The current temperature is above 25{{ unitSymbol$ }} **</h2>
+          *ngIf="below15$ && !apiFailing$">** Warning: The current temperature is above 25{{ unitSymbol$ }} **</h2>
       <h2 class="has-text-danger has-text-centered has-text-weight-bold"
-          *ngIf="below15$">** Warning: The current temperature is below 15{{ unitSymbol$ }} **</h2>
+          *ngIf="below15$ && !apiFailing$">** Warning: The current temperature is below 15{{ unitSymbol$ }} **</h2>
+      <!--<h2 class="has-text-danger has-text-centered has-text-weight-bold"-->
+          <!--*ngIf="apiFailing$">** API is failing **<br>-->
+        <!--<button class="button" (click)="getWeather()">Retry connection?</button></h2>-->
     </div>
   </div>
 </section>
