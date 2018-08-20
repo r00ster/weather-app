@@ -2,6 +2,8 @@
 
 App that displays current and coming week's weather (in Cape Town)
 
+Demo at: https://r00ster.github.io/weather-app/
+
 # Tech
 
  - Angular 6 (JS Framework)
