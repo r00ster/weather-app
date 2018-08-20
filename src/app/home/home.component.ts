@@ -50,23 +50,20 @@ export class HomeComponent implements OnInit {
 
   updateDegrees(tempUnit: string) {
     this.capeTownDailyWeather$ = this.capeTownDailyWeather$.map(day => {
-      if (tempUnit === 'Fahrenheit') {
-        day['temperatureMin'] = this.getFahrenheit(day['temperatureMin']);
-        day['temperatureMax'] = this.getFahrenheit(day['temperatureMax']);
-      } else {
-        day['temperatureMin'] = this.getCelsius(day['temperatureMin']);
-        day['temperatureMax'] = this.getCelsius(day['temperatureMax']);
-      }
+      day['temperatureMin'] = tempUnit === 'Fahrenheit' ?
+        this.getFahrenheit(day['temperatureMin']) :
+        this.getCelsius(day['temperatureMin']);
+      day['temperatureMax'] = tempUnit === 'Fahrenheit' ?
+        this.getFahrenheit(day['temperatureMax']) :
+        this.getCelsius(day['temperatureMax']);
       return day;
     });
     if (tempUnit === 'Fahrenheit') {
-      this.capeTownWeatherCurrently$ = this.getFahrenheit(this.capeTownWeatherCurrently$);
-      this.unitSymbol$ = '℉';
-      this.selectedUnit$ = 'Fahrenheit';
-    } else {
-      this.capeTownWeatherCurrently$ = this.getCelsius(this.capeTownWeatherCurrently$);
-      this.unitSymbol$ = '℃';
-      this.selectedUnit$ = 'Celsius';
+      this.capeTownWeatherCurrently$ = tempUnit === 'Fahrenheit' ?
+        this.getFahrenheit(this.capeTownWeatherCurrently$) :
+        this.getCelsius(this.capeTownWeatherCurrently$);
+      this.unitSymbol$ = tempUnit === 'Fahrenheit' ? '℉' : '℃';
+      this.selectedUnit$ = tempUnit;
     }
     this.above25$ = this.capeTownWeatherCurrently$ > 25;
     this.below15$ = this.capeTownWeatherCurrently$ < 15;
