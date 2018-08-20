@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
-import { Observable, timer, interval } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import { retryWhen } from 'rxjs/operators';
+import { mergeMap, finalize } from 'rxjs/operators';
+
 import {
   timeConverter,
   convertToFahrenheit,
-  convertToCelsius,
-  retryPipeline,
+  convertToCelsius
 } from '../utils';
 
 @Component({
@@ -42,9 +43,13 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  speedUpRetry(): void {
+    this.apiFailInterval = this.apiFailInterval / 2;
+  }
+
   getWeather(): void {
     this.data.getCapeTownWeather()
-      .pipe(retryWhen(retryPipeline()))
+      .pipe(retryWhen(this.retryPipeline()))
       .subscribe(data => {
         this.capeTownWeatherCurrently$ = data['currently'].temperature.toFixed();
         this.above25$ = this.capeTownWeatherCurrently$ > 25;
@@ -84,4 +89,16 @@ export class HomeComponent implements OnInit {
   getCelsius(degrees: number): number {
     return this.selectedUnit$ !== 'Celsius' ? convertToCelsius(degrees) : degrees;
   }
+
+  retryPipeline = () =>
+    (attempts: Observable<any>) => {
+      this.apiFailing$ = true;
+      return attempts.pipe(
+        mergeMap((error, i) => {
+          const retryAttempt = i + 1;
+          return timer(retryAttempt * this.apiFailInterval);
+        }),
+        finalize(() => console.log('API works again!'))
+      );
+    }
 }
