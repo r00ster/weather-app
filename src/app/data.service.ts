@@ -13,7 +13,7 @@ export class DataService {
   constructor(private http: HttpClient) {
     // solve CORS issues in dev (non https) mode
     this.corsAnywhereUrl = 'https://cors-anywhere.herokuapp.com/';
-    this.capeTownWeatherData = 'https://pi.darksky.net/forecast/bdbdf1842d3fbddd6e9dc57493177247/-33.9249,18.4241?units=si';
+    this.capeTownWeatherData = 'https://api.darksky.net/forecast/bdbdf1842d3fbddd6e9dc57493177247/-33.9249,18.4241?units=si';
   }
 
   getCapeTownWeather() {

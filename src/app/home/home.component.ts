@@ -58,13 +58,11 @@ export class HomeComponent implements OnInit {
         this.getCelsius(day['temperatureMax']);
       return day;
     });
-    if (tempUnit === 'Fahrenheit') {
-      this.capeTownWeatherCurrently$ = tempUnit === 'Fahrenheit' ?
-        this.getFahrenheit(this.capeTownWeatherCurrently$) :
-        this.getCelsius(this.capeTownWeatherCurrently$);
-      this.unitSymbol$ = tempUnit === 'Fahrenheit' ? '℉' : '℃';
-      this.selectedUnit$ = tempUnit;
-    }
+    this.capeTownWeatherCurrently$ = tempUnit === 'Fahrenheit' ?
+      this.getFahrenheit(this.capeTownWeatherCurrently$) :
+      this.getCelsius(this.capeTownWeatherCurrently$);
+    this.unitSymbol$ = tempUnit === 'Fahrenheit' ? '℉' : '℃';
+    this.selectedUnit$ = tempUnit;
     this.above25$ = this.capeTownWeatherCurrently$ > 25;
     this.below15$ = this.capeTownWeatherCurrently$ < 15;
   }
