@@ -13,7 +13,7 @@ Demo at: https://r00ster.github.io/weather-app/
 ## Requirements
 
 * Node - https://nodejs.org/en/
-* Angular - https://angular.io/ (install instructions below)
+* Angular - https://angular.io/ (installation instructions below)
 
 ## Installation 
 
@@ -28,6 +28,6 @@ ng serve -o
 ## Todos 
 
 * Search for other area's weather 
-* Better styling (add sun/cloud/rain icons)
+* Better styling (i.e. add sun/cloud/rain icons)
 * Burger menu for mobile
 
