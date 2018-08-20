@@ -16,8 +16,14 @@ export class DataService {
   }
 
   getCapeTownWeather() {
-    return this.http.get(this.corsAnywhereUrl +
-      this.capeTownWeatherData);
+    return this.http.get(
+      this.corsAnywhereUrl + this.capeTownWeatherData,
+      {
+        params: {
+          'timezone': 'Africa/Johannesburg'
+        }
+      }
+    );
   }
 }
 
