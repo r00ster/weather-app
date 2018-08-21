@@ -2,7 +2,7 @@
   <div class="hero-body">
     <div class="container has-text-centered">
       <i *ngIf="currentIcon$ !== ''" class="{{ currentIcon$ }} is-size-1 current-temp-icon" title="{{ currentSummary$ }}"></i>
-      <h1 *ngIf="capeTownWeatherCurrently$ !== ''" class="title">
+      <h1 *ngIf="capeTownWeatherCurrently$ !== null" class="title">
         The current weather in Cape Town is: {{ capeTownWeatherCurrently$?.toFixed() }}{{ unitSymbol$ }}
       </h1>
       <h2 class="has-text-danger has-text-centered has-text-weight-bold"
