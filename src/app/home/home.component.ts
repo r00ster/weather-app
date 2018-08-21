@@ -22,6 +22,8 @@ export class HomeComponent implements OnInit {
   unitSymbol$: string;
   above25$: boolean;
   below15$: boolean;
+  currentIcon$: string;
+  currentSummary$: string;
   apiFailing$: boolean;
   apiFailInterval: number;
   refreshTimer: Observable<number>;
@@ -35,11 +37,16 @@ export class HomeComponent implements OnInit {
     this.apiFailInterval = 1000;
     this.unitSymbol$ = '℃';
     this.apiFailing$ = false;
+    this.currentIcon$ = '';
+    this.currentSummary$ = '';
   }
 
   ngOnInit() {
     this.refreshTimer.subscribe(() => {
       this.getWeather();
+      setTimeout(() => {
+        console.log(this.capeTownWeatherCurrently$);
+      }, 2000);
     });
   }
 
@@ -52,6 +59,8 @@ export class HomeComponent implements OnInit {
       .pipe(retryWhen(this.retryPipeline()))
       .subscribe(data => {
         this.capeTownWeatherCurrently$ = data['currently'].temperature;
+        this.currentIcon$ = this.getIcon(data['currently'].icon);
+        this.currentSummary$ = data['currently'].summary;
         this.above25$ = this.capeTownWeatherCurrently$ > 25;
         this.below15$ = this.capeTownWeatherCurrently$ < 15;
         this.capeTownDailyWeather$ = data['daily'].data.map(day => {
@@ -88,6 +97,19 @@ export class HomeComponent implements OnInit {
 
   getCelsius(degrees: number): number {
     return this.selectedUnit$ !== 'Celsius' ? convertToCelsius(degrees) : degrees;
+  }
+
+  getIcon (icon: string): string {
+    switch (icon) {
+      case 'partly-cloudy-day':
+        return 'wi wi-day-cloudy';
+      case 'clear-day':
+        return 'wi wi-day-sunny';
+      case 'partly-cloudy-night':
+        return 'wi wi-night-partly-cloudy';
+      default:
+        return 'wi wi-day-sunny';
+    }
   }
 
   retryPipeline = () =>

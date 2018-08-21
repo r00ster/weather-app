@@ -1,7 +1,8 @@
 <section class="hero is-primary ">
   <div class="hero-body">
-    <div class="container">
-      <h1 class="title has-text-centered">
+    <div class="container has-text-centered">
+      <i class="{{ currentIcon$ }} is-size-1 current-temp-icon" title="{{ currentSummary$ }}"></i>
+      <h1 class="title">
         The current weather in Cape Town is: {{ capeTownWeatherCurrently$?.toFixed() }}{{ unitSymbol$ }}
       </h1>
       <h2 class="has-text-danger has-text-centered has-text-weight-bold"
@@ -29,6 +30,7 @@
         <table class="table temp-table">
           <thead>
           <tr>
+            <th><abbr title="Icon"></abbr></th>
             <th><abbr title="Date and Time">Date and Time</abbr></th>
             <th><abbr title="Min Temperature">Min Temp</abbr></th>
             <th><abbr title="Max Temperature">Max Temp</abbr></th>
@@ -36,6 +38,7 @@
           </thead>
           <tbody>
           <tr *ngFor="let day of capeTownDailyWeather$">
+            <td><i class="{{ getIcon(day['icon']) }}" title="{{ day['summary'] }}"></i></td>
             <td>{{ day['time'] }}</td>
             <td>{{ day['temperatureMin'].toFixed() }}{{ unitSymbol$ }}</td>
             <td>{{ day['temperatureMax'].toFixed() }}{{ unitSymbol$ }}</td>

@@ -27,6 +27,8 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/weathericons/css/weather-icons.min.css",
+              "node_modules/weathericons/css/weather-icons-wind.min.css",
               "node_modules/bulma/css/bulma.min.css",
               "src/styles.scss"
             ],
