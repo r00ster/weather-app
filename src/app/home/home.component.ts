@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit {
   currentIcon$: string;
   currentSummary$: string;
   apiFailing$: boolean;
+  speedingUpRetries$: boolean;
   apiFailInterval: number;
   refreshTimer: Observable<number>;
 
@@ -39,19 +40,21 @@ export class HomeComponent implements OnInit {
     this.apiFailing$ = false;
     this.currentIcon$ = '';
     this.currentSummary$ = '';
+    this.speedingUpRetries$ = false;
   }
 
   ngOnInit() {
     this.refreshTimer.subscribe(() => {
       this.getWeather();
-      setTimeout(() => {
-        console.log(this.capeTownWeatherCurrently$);
-      }, 2000);
     });
   }
 
   speedUpRetry(): void {
+    this.speedingUpRetries$ = true;
     this.apiFailInterval = this.apiFailInterval / 2;
+    setTimeout(() => {
+      this.speedingUpRetries$ = false;
+    }, 2000);
   }
 
   getWeather(): void {
