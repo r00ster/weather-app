@@ -28,6 +28,6 @@ ng serve -o
 ## Todos 
 
 * Search for other area's weather 
-* Better styling (i.e. add sun/cloud/rain icons)
+* ~Better styling (i.e. add sun/cloud/rain icons)~
 * Burger menu for mobile
 
