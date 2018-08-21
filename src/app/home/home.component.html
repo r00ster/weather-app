@@ -12,7 +12,7 @@
       <h2 class="has-text-danger has-text-centered has-text-weight-bold"
           *ngIf="apiFailing$">** API is failing **<br>
         <button class="button" [disabled]="speedingUpRetries$" (click)="speedUpRetry()">Speed up retry?</button></h2>
-      <span *ngIf="speedingUpRetries$">Speeding up retry interval...</span>
+      <span *ngIf="speedingUpRetries$">Decreasing retry interval...</span>
     </div>
   </div>
 </section>
