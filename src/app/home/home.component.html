@@ -21,14 +21,15 @@
   <div class="container">
     <div class="columns">
       <div class="column has-text-centered">
-        <span>Selected unit is:</span>
+        <div *ngIf="loading$" class="lds-dual-ring"></div>
+        <h2>Selected unit is:</h2>
         <div class="buttons has-addons is-centered">
         <span (click)="updateDegrees('Celsius')" class="button"
               [class.is-primary]="selectedUnit$ === 'Celsius'">Celsius</span>
           <span (click)="updateDegrees('Fahrenheit')" class="button"
                 [class.is-primary]="selectedUnit$ === 'Fahrenheit'">Fahrenheit</span>
         </div>
-        <table class="table temp-table">
+        <table *ngIf="capeTownDailyWeather$ !== []" class="table temp-table">
           <thead>
           <tr>
             <th><abbr title="Icon"></abbr></th>

@@ -25,22 +25,26 @@ export class HomeComponent implements OnInit {
   currentIcon$: string;
   currentSummary$: string;
   apiFailing$: boolean;
+  loading$: boolean;
   speedingUpRetries$: boolean;
   apiFailInterval: number;
   refreshTimer: Observable<number>;
 
   constructor(private data: DataService) {
     // refresh every 20 minutes
+    this.selectedUnit$ = 'Celsius';
     this.capeTownWeatherCurrently$ = null;
     this.capeTownDailyWeather$ = [];
-    this.refreshTimer = timer(0, 20 * 60 * 1000);
-    this.selectedUnit$ = 'Celsius';
-    this.apiFailInterval = 1000;
     this.unitSymbol$ = '℃';
-    this.apiFailing$ = false;
+    this.above25$ = false;
+    this.below15$ = false;
     this.currentIcon$ = '';
     this.currentSummary$ = '';
+    this.loading$ = true;
     this.speedingUpRetries$ = false;
+    this.refreshTimer = timer(0, 20 * 60 * 1000);
+    this.apiFailInterval = 1000;
+    this.apiFailing$ = false;
   }
 
   ngOnInit() {
@@ -61,6 +65,7 @@ export class HomeComponent implements OnInit {
     this.data.getCapeTownWeather()
       .pipe(retryWhen(this.retryPipeline()))
       .subscribe(data => {
+        this.loading$ = false;
         this.capeTownWeatherCurrently$ = data['currently'].temperature;
         this.currentIcon$ = this.getIcon(data['currently'].icon);
         this.currentSummary$ = data['currently'].summary;
