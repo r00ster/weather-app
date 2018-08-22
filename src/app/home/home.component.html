@@ -1,6 +1,7 @@
 <section class="hero is-primary ">
   <div class="hero-body">
     <div class="container has-text-centered">
+      <div *ngIf="loading$" class="lds-dual-ring"></div>
       <i *ngIf="currentIcon$ !== ''" class="{{ currentIcon$ }} is-size-1 current-temp-icon" title="{{ currentSummary$ }}"></i>
       <h1 *ngIf="capeTownWeatherCurrently$ !== null" class="title">
         The current weather in Cape Town is: {{ capeTownWeatherCurrently$?.toFixed() }}{{ unitSymbol$ }}
@@ -21,7 +22,6 @@
   <div class="container">
     <div class="columns">
       <div class="column has-text-centered">
-        <div *ngIf="loading$" class="lds-dual-ring"></div>
         <h2>Selected unit is:</h2>
         <div class="buttons has-addons is-centered">
         <span (click)="updateDegrees('Celsius')" class="button"
