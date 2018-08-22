@@ -29,5 +29,6 @@ ng serve -o
 
 * Search for other area's weather 
 * ~Better styling (i.e. add sun/cloud/rain icons)~
+* ~Show loading icon when loading data~
 * Burger menu for mobile
 
